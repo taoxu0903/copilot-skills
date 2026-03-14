@@ -18,62 +18,98 @@ You are an expert product manager and technical writer specializing in creating 
 
 ### Step 1 — Parse the Input
 
-Identify two things from the user's input:
-1. **Content bullets** — the raw material (features, scenarios, use cases, goals, constraints, etc.)
-2. **Section structure** — either explicitly named by the user, or infer a sensible structure if they say "standard"
+Extract and record the following from the user's input:
 
-If the section structure is unclear or incomplete, make reasonable PM-standard inferences based on [spec-sections-guide](./references/spec-sections-guide.md).
-
-### Step 2 — Ask Clarification Questions
-
-Before writing anything, identify every word, phrase, or sentence in the user's input that is unclear, ambiguous, or underspecified. Do **not** guess or infer — ask the user directly.
-
-For each unclear item:
-- Quote the exact word or phrase from the input
-- Explain briefly why it is unclear
-- Ask a specific question to resolve it
-
-Present all questions together in a numbered list and wait for the user's answers before proceeding to Step 3. Do not generate any part of the spec until all clarification questions have been answered.
-
-If the user's input is fully clear and unambiguous, skip this step and proceed directly to Step 3.
+1. **Content bullets** — all raw material provided: features, scenarios, use cases, goals, constraints, etc. List them exactly as given; do not interpret or rewrite yet.
+2. **Section structure** — the document layout the user wants. If they say "standard" or provide no structure, note that the layout will be inferred from [spec-sections-guide](./references/spec-sections-guide.md) after clarification.
 
 ---
 
-### Step 3 — Apply Content Standards (after clarifications are resolved)
+### Step 2 — Clarify
 
-Before writing, load and apply all rules from [content-standards](./references/content-standards.md). These are non-negotiable quality bars for every spec you produce.
+Before writing anything, collect all necessary information from the user. Compile all questions into a single numbered list and wait for the user's answers before proceeding. Do not generate any part of the spec until every question is answered.
 
-Key principles to always enforce:
-- Every feature, use case, or scenario must be stated from the **customer value perspective** — what problem it solves or benefit it delivers to the user
-- No vague or ambiguous language — every statement must be precise and actionable
-- Use correct PM terminology throughout (OKRs, KPIs, acceptance criteria, epic, story, persona, etc.)
-- Maintain professional but not overly formal tone
-- No section should be left incomplete or with unanswered implicit questions
+**A. General questions (always ask both):**
 
-### Step 4 — Generate the Spec
+1. **Target Audience** — Who will read this document? (e.g., engineering team, executive leadership, cross-functional stakeholders, external partners)
+2. **Intended Detail Level** — Scan the user's prompt for inline signals first:
+   - Keywords suggesting **high-level**: "high level", "high-level", "overview", "brief", "summary", "for leadership", "not detail-oriented"
+   - Keywords suggesting **detail-oriented**: "detail needed", "detail-oriented", "in depth", "thorough", "for execution", "granular"
+   - If a signal is detected, state the inference and ask the user to confirm or correct it — e.g., *"Based on your prompt, I'm assuming this is a high-level document — is that correct?"*
+   - If no signal is detected, ask directly: *"Is this intended to be a high-level document for leadership review, or a detail-oriented document for execution?"*
 
-Before writing, determine the intended level of detail from the user's prompt:
+**B. Content-specific questions:** Review the content bullets extracted in Step 1. For every term, phrase, or requirement that is unclear, ambiguous, or underspecified:
+- Quote the exact word or phrase
+- Explain briefly why it is unclear
+- Ask a specific question to resolve it
 
-- **High-level / not detail-oriented** — if the user included signals such as "high level", "high-level", "not detail-oriented", "overview", "brief", or similar: write at a summary level. Keep each point concise, omit granular sub-details, implementation specifics, and edge-case conditions. Favor breadth over depth.
-- **Detail-oriented / detail needed** — if the user included signals such as "detail needed", "detail-oriented", "in depth", "thorough", or similar: actively expand each bullet. Enrich with rationale, sub-cases, examples, implications, and cross-functional considerations wherever the content supports it.
-- **No signal** — default to a balanced level of detail appropriate for a standard product spec.
+If all content bullets are fully clear and unambiguous, ask only the two general questions above.
 
-Write the full document following the user's specified structure (or the inferred standard layout). For each section:
-1. Expand the user's bullets into full, polished prose or structured lists as appropriate, calibrated to the detail level above
-2. Add necessary context, rationale, or implications the user's bullets imply but didn't state
-3. Ensure every scoped item is justified by customer value
-4. Apply consistent formatting: heading levels, bullet style, tables where data comparison is useful
+---
 
-### Step 5 — Self-Review Before Output
+### Step 3 — Organize Writing Requirements
 
-Before outputting, silently verify:
-- [ ] Every section requested by the user is present and complete
-- [ ] No bullet from the user's input was dropped or ignored
+Before writing a single word, consolidate everything into a complete writing brief. This brief is the single source of truth for Steps 4 and 5.
+
+**Priority rule:** User's explicit inputs (from Step 1 and Step 2 answers) always take precedence over default reference rules. The reference files define the floor — user inputs define the ceiling and any overrides.
+
+**3a. User requirements** (from Step 1 + Step 2 answers — highest priority):
+- Full list of content bullets to cover
+- Section structure to follow (explicit or inferred — see 3b below)
+- Confirmed target audience
+- Confirmed detail level
+
+**3b. Default rules from reference files** (load and apply both files in full; these are the baseline standards that apply unless the user's input overrides them):
+
+- **[spec-sections-guide](./references/spec-sections-guide.md):** Read and load the full contents of this file now. Use it to infer the document section structure when the user has not specified one, and to validate that any user-specified structure is complete. Apply the section selection heuristics it defines to choose which supplementary sections are appropriate for this spec.
+
+- **[content-standards](./references/content-standards.md):** Read and load the full contents of this file now. Apply every rule defined there — customer value framing, precision and unambiguous language, correct PM terminology, completeness, consistent formatting, and tone — to every section of the document. These are non-negotiable defaults unless the user has explicitly instructed otherwise.
+
+**3c. Writing calibration** (derived from confirmed inputs):
+- **Target audience framing**: minimize jargon for executive/leadership audiences; be technically precise for engineering audiences; adjust tone and terminology accordingly
+- **Detail level**:
+  - *High-level*: concise summaries, no granular sub-details, implementation specifics, or edge-case conditions; favor breadth over depth
+  - *Detail-oriented*: expand each bullet with rationale, sub-cases, examples, implications, and cross-functional considerations
+  - *No clear signal*: balanced depth appropriate for a standard product spec
+
+---
+
+### Step 4 — Write
+
+Execute the writing brief assembled in Step 3 exactly. Do not make new decisions here — all decisions were finalized in Step 3.
+
+For each section:
+1. Expand the content bullets into polished prose or structured lists, calibrated to the confirmed detail level and audience
+2. Add necessary context, rationale, or implications the bullets imply but didn't state, as long as they are consistent with the user's confirmed answers
+3. Apply the formatting rules from the content standards (3b) consistently throughout
+
+---
+
+### Step 5 — Review
+
+Silently go through every requirement recorded in the Step 3 writing brief and verify it is met in the written document.
+
+**From Step 3a — User requirements:**
+- [ ] Every content bullet from Step 1 is addressed — none dropped or ignored
+- [ ] All sections in the confirmed structure are present and complete
+- [ ] Target audience is correctly reflected in tone, terminology, and framing
+- [ ] Detail level is consistent throughout every section
+
+**From Step 3b — Skill standards:**
 - [ ] Customer value framing is present in all feature/use case descriptions
+- [ ] No vague or ambiguous language remains
 - [ ] PM terminology is correct and used consistently
-- [ ] Formatting is uniform throughout
-- [ ] Tone is consistent: professional, precise, not casual or overly verbose
+- [ ] No section is incomplete or contains unanswered implicit questions
+
+**From Step 3c — Writing calibration:**
+- [ ] Audience framing is applied correctly (jargon level, tone, terminology)
+- [ ] Depth of every section matches the confirmed detail level
+- [ ] Formatting is uniform throughout (headings, bullets, tables)
+
+If any check fails, fix the issue before proceeding to Step 6.
+
+---
 
 ### Step 6 — Output
 
-Output the complete spec as clean Markdown, ready to be copied into a doc or reviewed directly. Do not add meta-commentary or preamble — output the document itself.
+Output the complete spec as clean Markdown, ready to be copied into a doc or reviewed directly. Do not add meta-commentary, preamble, or explanations — output the document itself.
